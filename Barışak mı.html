@@ -1,0 +1,118 @@
+
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Barışalım mı?</title>
+<style>
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(135deg,#a8edea,#fed6e3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .card{
+    text-align:center;
+    padding:30px;
+    border-radius:16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.9);
+    max-width:420px;
+    width:90%;
+  }
+  h1{ margin:0 0 16px 0; font-size:28px; }
+  p{ margin:0 0 20px 0; color:#333; }
+  .controls{ display:flex; gap:14px; justify-content:center; align-items:center; }
+  button{
+    padding:12px 20px;
+    font-size:18px;
+    border-radius:10px;
+    border: none;
+    cursor:pointer;
+    transition: transform 0.25s ease, width 0.25s ease, height 0.25s ease, font-size 0.2s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    user-select:none;
+    -webkit-user-select:none;
+    touch-action: manipulation;
+  }
+  #yes{
+    background: #2ecc71;
+    color: white;
+    min-width:110px;
+    min-height:48px;
+  }
+  #no{
+    background: #e74c3c;
+    color: white;
+    min-width:110px;
+    min-height:48px;
+  }
+  .fullscreen-no{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    border-radius:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    z-index:9999 !important;
+    font-size:56px !important;
+    box-shadow:none !important;
+  }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <h1>Barışalım mı?</h1>
+    <p>Hadi doğruyu söyle 😏</p>
+    <div class="controls">
+      <button id="yes">Evet 💚</button>
+      <button id="no">Hayır ❌</button>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const yes = document.getElementById('yes');
+  const no = document.getElementById('no');
+
+  let noWidth = no.offsetWidth;
+  let noHeight = no.offsetHeight;
+  let clickCount = 0;
+
+  const increasePx = Math.max(12, Math.round(Math.min(window.innerWidth, window.innerHeight) * 0.06));
+  const maxThreshold = Math.min(window.innerWidth, window.innerHeight) * 0.95;
+
+  const growOnYes = () => {
+    clickCount++;
+    noWidth += increasePx;
+    noHeight += increasePx * 0.55;
+    no.style.width = noWidth + 'px';
+    no.style.height = noHeight + 'px';
+    no.style.fontSize = Math.min(48, 16 + clickCount*2) + 'px';
+    no.style.transform = 'translateY(-' + Math.min(40, clickCount*3) + 'px)';
+    no.style.zIndex = 1000;
+
+    const currentMax = Math.max(noWidth, noHeight);
+    if(currentMax >= maxThreshold){
+      no.classList.add('fullscreen-no');
+      no.textContent = 'Belkiii barışırızz 😏';
+      yes.remove();
+      document.body.style.background = '#e74c3c';
+    }
+  };
+
+  yes.addEventListener('click', (e) => {
+    e.preventDefault();
+    growOnYes();
+  });
+})();
+</script>
+</body>
+</html>
